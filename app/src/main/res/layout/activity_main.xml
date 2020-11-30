@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_700"
+        android:textCursorDrawable="@null"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -13,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
+        android:layout_below="@id/searchBox"
         android:layout_above="@id/buttons"
         tools:listitem="@layout/example_item" />
 

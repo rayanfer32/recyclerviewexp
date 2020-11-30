@@ -5,8 +5,11 @@ import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+
+
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
@@ -29,6 +32,22 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
         recycler_view.adapter = adapter
         recycler_view.layoutManager = GridLayoutManager(this, 3)
         recycler_view.setHasFixedSize(true)
+
+
+
+        searchBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.getFilter().filter(newText)
+                return false
+            }
+
+        })
+
+
     }
 
     private fun loadJsonItems(): ArrayList<ExampleItem> {
@@ -49,7 +68,7 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
 
 
 //                drawable = getImageIdFromAsset(itemName)
-                Log.i("INFO", filePath(itemName))
+//                Log.i("INFO", filePath(itemName))
 
                 arrlist += ExampleItem(
                         drawable,//Pass only int id
@@ -65,22 +84,22 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
         return arrlist
     }
 
-    fun filePath(image: String, _context: Context): String? {
-        val file = File(_context.getCacheDir() + File.separator.toString() + image)
-        return if (file.exists()) file.getPath() else null
-    }
+//    fun filePath(image: String, _context: Context): String? {
+//        val file = File(_context.cacheDir + File.separator.toString() + image)
+//        return if (file.exists()) file.getPath() else null
+//    }
 
     private fun getImageIdFromAsset(filename: String): Int {
         TODO("Find the icon asset from its itemname and return its id " +
                 "Split the itemName into aliases using seperator for | and check if\" +\n" +
                    " the icon exists in the svg asset folder ")
 
-        val itemAliases = filename.split("|",
-                ignoreCase =false,
-                limit = 0)
-        for alias in itemAliases{
-
-        }
+//        val itemAliases = filename.split("|",
+//                ignoreCase =false,
+//                limit = 0)
+//        for alias in itemAliases{
+//
+//        }
 //                try {
 //                    if(itemName.contains(itemName, ignoreCase = true)){
 //                        drawable = resources.getIdentifier("svg/$itemName", "drawable","com.example.recyclerviewexp")

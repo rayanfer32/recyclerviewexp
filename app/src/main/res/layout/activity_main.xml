@@ -6,9 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<HorizontalScrollView
+    android:id="@+id/chipScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup1"
+            app:singleLine="true"
+            app:singleSelection="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacing="8dp">
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="food1"/>-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="food2" />-->
+
+        </com.google.android.material.chip.ChipGroup>
+</HorizontalScrollView>
+
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchBox"
         android:layout_width="match_parent"
+        android:layout_below="@id/chipScrollView"
         android:layout_height="wrap_content"
         android:background="@color/teal_700"
         android:textCursorDrawable="@null"
@@ -36,8 +64,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="removeItem"
             android:layout_weight="1"
+            android:fontFamily="@font/nunito"
+            android:onClick="removeItem"
             android:text="Remove Item" />
 
         <Button

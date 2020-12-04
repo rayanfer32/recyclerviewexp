@@ -29,7 +29,7 @@ class ItemAdapter(private val exampleList: List<ExampleItem>,
         override fun onClick(v: View?) {
             val position: Int = adapterPosition
             if(position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position)
+                listener.onItemClick(position,filteredList)
             }
         }
     }
@@ -58,7 +58,7 @@ class ItemAdapter(private val exampleList: List<ExampleItem>,
                 if (charSearch.isEmpty()) {
                     filteredList = exampleList
                 } else {
-                    var resultList:List<ExampleItem> = emptyList()
+                    var resultList: List<ExampleItem> = emptyList()
                     for (row in exampleList) {
                         if (row.text1.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                             resultList += row
@@ -81,6 +81,6 @@ class ItemAdapter(private val exampleList: List<ExampleItem>,
     }
 
     interface OnItemClickListener{
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int,filteredList:List<ExampleItem>)
     }
 }

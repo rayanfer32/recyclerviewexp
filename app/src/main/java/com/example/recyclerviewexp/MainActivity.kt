@@ -1,19 +1,18 @@
 package com.example.recyclerviewexp
 
-import android.content.Context
-import android.nfc.Tag
+
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.View
-
-
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
-import java.io.File
 import java.io.IOException
 import kotlin.random.Random
 
@@ -21,6 +20,7 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
      private lateinit var exampleList: ArrayList<ExampleItem>
      private lateinit var adapter: ItemAdapter
+     private lateinit var tempList: ArrayList<ExampleItem>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
 
 
 
-        searchBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searchBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
         })
 
 
-    }
+    }//onCreate
 
     private fun loadJsonItems(): ArrayList<ExampleItem> {
         val arrlist = ArrayList<ExampleItem>()
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
 
 
 //                drawable = getImageIdFromAsset(itemName)
-//                Log.i("INFO", filePath(itemName))
+//                getImageIdFromAsset("bread")
 
                 arrlist += ExampleItem(
                         drawable,//Pass only int id
@@ -89,11 +89,14 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
 //        return if (file.exists()) file.getPath() else null
 //    }
 
-    private fun getImageIdFromAsset(filename: String): Int {
-        TODO("Find the icon asset from its itemname and return its id " +
-                "Split the itemName into aliases using seperator for | and check if\" +\n" +
-                   " the icon exists in the svg asset folder ")
+    private fun getImageIdFromResFolder(filename: String): Int {
+        /** Find the icon asset from its itemname and return its id and
+          Split the itemName into aliases using '|' separator and check if
+                the icon exists in the svg asset folder ) */
 
+        val resID = resources.getIdentifier(filename, "drawable", packageName)
+        Log.i("INFO", resID.toString())
+        return resID
 //        val itemAliases = filename.split("|",
 //                ignoreCase =false,
 //                limit = 0)
@@ -127,11 +130,28 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
         return  list
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(position: Int, filteredList: List<ExampleItem>) {
         Toast.makeText(this, "Item $position Clicked!", Toast.LENGTH_SHORT).show()
-        val clickedItem: ExampleItem = exampleList[position]
-        clickedItem.text1 = "Clicked"
+        val clickedItem: ExampleItem = filteredList[position]
+
+        clickedItem.quantity = 1.0f // prompt a dialog for the user to input quantity over here and return the quantity
+        clickedItem.unit = "L"
+//        tempList += clickedItem
+        createChip(clickedItem)
         adapter.notifyItemChanged(position)
+    }
+
+
+    fun createChip(clickedItem: ExampleItem){
+        val chip = Chip(this)
+        chip.setText(clickedItem.text1)
+        chip.isCloseIconVisible = true
+        chip.setOnCloseIconClickListener{
+            // Smoothly remove chip from chip group
+            TransitionManager.beginDelayedTransition(chipGroup1)
+            chipGroup1.removeView(chip)
+        }
+        chipGroup1.addView(chip)
     }
 
     fun removeItem(view: View) {
@@ -139,6 +159,7 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
         exampleList.removeAt(index)
         adapter.notifyItemRemoved(index)
     }
+
     fun insertItem(view: View) {
         val index:Int = Random.nextInt(8)
         val newItem = ExampleItem(

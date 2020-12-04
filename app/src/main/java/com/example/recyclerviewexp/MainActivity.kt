@@ -69,12 +69,23 @@ class MainActivity : AppCompatActivity() ,ItemAdapter.OnItemClickListener{
 
 //                drawable = getImageIdFromAsset(itemName)
 //                getImageIdFromAsset("bread")
-
-                arrlist += ExampleItem(
-                        drawable,//Pass only int id
-                        itemName,
-                        jsonobj.getString("brand")
-                )
+                if (itemName.contains("|")) {
+                    val itemNames = itemName.split("|")
+                    for(splitItem in itemNames) {
+                        arrlist += ExampleItem(
+                                drawable,//Pass only int id
+                                splitItem,
+                                jsonobj.getString("brand")
+                        )
+                    }
+                }
+                else {
+                    arrlist += ExampleItem(
+                            drawable,//Pass only int id
+                            itemName,
+                            jsonobj.getString("brand")
+                    )
+                }
             }
         }
         catch (ioException: IOException) {
